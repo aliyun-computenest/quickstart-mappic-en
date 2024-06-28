@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>Home - Aliyun 计算巢 x Demo</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#introduction">Introduction</a></li>
+              
+          
+              <li><a href="#instance-specifications-recommended-for-tb-level-data-scale">Instance Specifications (Recommended for TB-level data scale)</a></li>
+              
+                  <li><a href="#ack-version-specifications">ACK version specifications</a></li>
+                  
+              
+          
+              <li><a href="#deployment-process">Deployment Process</a></li>
+              
+                  <li><a href="#preparation">Preparation</a></li>
+                  
+              
+                  <li><a href="#step-1-deployment-entry">Step 1: Deployment Entry</a></li>
+                  
+              
+                  <li><a href="#step-2-apply-for-trial">Step 2: Apply for Trial</a></li>
+                  
+              
+                  <li><a href="#step-3-create-service">Step 3: Create Service</a></li>
+                  
+              
+          
+              <li><a href="#manage-resources">Manage Resources</a></li>
+              
+          
+              <li><a href="#quick-experience">Quick Experience</a></li>
+              
+                  <li><a href="#web-experience-for-non-commercial-versions-only">Web Experience (for non commercial versions only)</a></li>
+                  
+              
+          
+              <li><a href="#contact-us">contact us</a></li>
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <p>This article introduces detailed operations on how to quickly create and obtain MAPPIC services.</p>
+<hr />
+<h2 id="introduction"><b>Introduction</b></h2>
+<ul>
+<li>
+<p>MAPPIC is a confidential computing platform by Ant Group, targeting massive data and model privacy protection. MAPPIC offers a trial version on the Computing Nest, enabling you to rapidly deploy and experience MAPPIC services and operational monitoring without the need to purchase cloud servers on your own. This way, you can establish your own privacy protection applications.</p>
+</li>
+<li>
+<p>Core capabilities include: Privacy-Preserving AI/BI, TEE-based LLM Privacy-Preserving Inference and Fine-tuning; we also support a variety of data and AI open-source frameworks, such as Spark, ipex-llm, PyTorch, DeepSpeed, and more. Moreover, you can swiftly develop data sandboxing, trusted data spaces, and other confidential computing paradigms using MAPPIC.</p>
+</li>
+<li>
+<p>Currently, MAPPIC has discontinued its beta release. All users are invited to register for early access. Should you have any inquiries, please don't hesitate to join our community for discussion.</p>
+</li>
+</ul>
+<hr />
+<h2 id="instance-specifications-recommended-for-tb-level-data-scale"><b>Instance Specifications (Recommended for TB-level data scale)</b></h2>
+<h4 id="ack-version-specifications"><b>ACK version specifications</b></h4>
+<ol>
+<li>3 ECSs, and each ECS instance has a specification of 4 cores and 32G.</li>
+<li>EPC: 48G, Plaintext: 48G</li>
+<li>Operating System: Alibaba Cloud Linux 2.1903 LTS 64-bit (Hunting Beagle)</li>
+<li>Instance Specification: <a href="https://www.alibabacloud.com/help/doc-detail/25378.htm#r7t">ecs.r7t.xlarge</a></li>
+</ol>
+<p>For more commercial specifications and configuration references, please feel free to consult in the DingTalk group (69285014993).</p>
+<p><strong>MySQL specifications</strong></p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Storage Capacity</th>
+<th>CPU Specification</th>
+<th>Maximum Connections</th>
+<th>Time Zone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.0</td>
+<td>100g</td>
+<td>1c 2g</td>
+<td>2000</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Redis specifications</strong></p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>CPU Specification</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.0</td>
+<td>1c 2g</td>
+<td>Minimum standard, upgradeable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="deployment-process"><b>Deployment Process</b></h2>
+<h4 id="preparation"><b>Preparation</b></h4>
+<p>Before applying for a trial, you need to prepare an Alibaba Cloud account to access and create resources such as ECS, VPC, ROS, ACK, REDIS, RDS, etc.</p>
+<ul>
+<li>If you are using a primary account, you can create service instances directly.</li>
+<li>If you are creating service instances as a RAM user, and it's your first time using Alibaba Cloud's Computing Nest, you need to add the necessary permissions for the resources you intend to use to your RAM user's account before creating service instances.For more information, please refer to <a href="https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user">Authorizing RAM Users</a></li>
+</ul>
+<h4 id="step-1-deployment-entry"><b>Step 1: Deployment Entry</b></h4>
+<p>You can search through the MAPPIC keyword in Alibaba Cloud's computing nest, or click on the <a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?spm=5176.24779694.0.0.36be4d22zpKKq3&amp;type=user&amp;ServiceId=service-ae7e12bcabc840f1bf14&amp;isTrial=true">Deployment Link</a> to quickly experience it.</p>
+<h4 id="step-2-apply-for-trial"><b>Step 2: Apply for Trial</b></h4>
+<p>Before using, please complete the application process following the provided instructions. Once your application has been approved, you will be able to proceed with creating your service.</p>
+<p><img src="images/apply.png" width="800" height="200"></p>
+<h4 id="step-3-create-service"><b>Step 3: Create Service</b></h4>
+<ol>
+<li>
+<p>Access the service activation configuration interface. Following our recommended [machine specifications], sequentially fill in the <strong>service instance name, select the region, payment type, database username and password, cluster configuration, as well as network settings</strong>. Finally, <strong>click on Confirm Order</strong>.</p>
+<p><img src="images/create.png" width="800" height="200"></p>
+</li>
+<li>
+<p>On the <strong>order confirmation page</strong>, confirm permissions, basic configuration, and billing information. After confirming everything is correct, click <strong>Create Now</strong>.</p>
+<blockquote>
+<p><strong>Explanation</strong>: If there is a lack of permissions, it is recommended to apply for the missing permissions before creating the service, otherwise it may cause resource creation failure.</p>
+</blockquote>
+<p><img src="images/permissions.png" width="800" height="200"></p>
+</li>
+<li>
+<p>After successful submission, you can click the <strong>go to list view</strong> button to go to the service instance page to view the creation information of the service instance.
+The process of creating a service instance takes approximately 20 minutes, please be patient.</p>
+<p><img src="images/show_instance.png" width="800" height="200"></p>
+<hr />
+</li>
+</ol>
+<h2 id="manage-resources"><b>Manage Resources</b></h2>
+<ol>
+<li>
+<p>After the service instance is created, you can click on the service instance name on the service details page or service instance page to enter the service instance details page.</p>
+<p><img src="images/watch_instance.png" width="800" height="200">
+<img src="images/service_detail.png" width="800" height="200"></p>
+</li>
+<li>
+<p>On the service instance details page, click on the resource tab to view instance information such as MySQL, Redis, and ECS, and perform maintenance.</p>
+<p><img src="images/resourceList.png" width="800" height="200"></p>
+<hr />
+</li>
+</ol>
+<h2 id="quick-experience"><b>Quick Experience</b></h2>
+<ol>
+<li>
+<p>Verify Service Deployment Results</p>
+<p>After entering the <a href="https://computenest.console.aliyun.com/welcome/cn-hangzhou?spm=a2c4g.11186623.0.0.4aa15a05BUElCU">Compute Nest service</a>, select <strong>My Services</strong> in the left navigation bar, click on the service name to enter the service details page, and then click on the <strong>Service Instance</strong> tab to view all current instance information.
+<img src="images/watch_instance.png" width="800" height="200"></p>
+</li>
+<li>
+<p>View External Service IP</p>
+<p>Click on the service instance name or ID to enter the service instance details page and view the access IP address.</p>
+<p><img src="images/service_ip.png" width="800" height="200"></p>
+</li>
+<li>
+<p>Default Definitions (Not Modifiable in Trial Version)</p>
+<table>
+<thead>
+<tr>
+<th>Definition</th>
+<th>CPU Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tenantId</td>
+<td>tenant Name: <strong>mappic_confidential_cloud_computing</strong></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Configure User's OSS Address (Mandatory)</p>
+<p>Update the OSS address to the user's own OSS.</p>
+<p>a. Modify the following properties in the <strong>spark_config</strong> attribute.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ossEndpoint</td>
+<td>User's Own OSS Address</td>
+</tr>
+<tr>
+<td>ossAccessKeyId</td>
+<td>User's OSS AK</td>
+</tr>
+<tr>
+<td>ossAccessKeySecret</td>
+<td>User's OSS SK</td>
+</tr>
+</tbody>
+</table>
+<p>b. Modify the following fields in the <strong>oss_config</strong> attribute.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mainDevOssEp</td>
+<td>User's Own OSS Address</td>
+</tr>
+<tr>
+<td>mainDevOssBucketName</td>
+<td>Bucket Name for Upload Execution Plans</td>
+</tr>
+<tr>
+<td>mainDevOssFilePath</td>
+<td>Path for Upload Execution Plans</td>
+</tr>
+<tr>
+<td>mainDevOssAccessKeyId</td>
+<td>OSS AK</td>
+</tr>
+<tr>
+<td>mainDevOssAccessKeySecret</td>
+<td>OSS SK</td>
+</tr>
+<tr>
+<td>mappicOssBucketName</td>
+<td>Bucket Name for Log Uploads</td>
+</tr>
+<tr>
+<td>mainDevOssLogFilePath</td>
+<td>Storage Path for Task Execution Logs</td>
+</tr>
+<tr>
+<td>mappicOssAccessKeyId</td>
+<td>OSS AK</td>
+</tr>
+<tr>
+<td>mappicOssAccessKeySecret</td>
+<td>OSS SK</td>
+</tr>
+</tbody>
+</table>
+<p>Update tenant OSS configuration through the following interface</p>
+</li>
+</ol>
+<pre><code class="language-java">    curl -X POST -d  '{&quot;tenantId&quot;: &quot;mappic_confidential_cloud_computing&quot;,&quot;ossEndpoint&quot;: &quot;xxxxxxxx&quot;,&quot;ossAccessKeyId&quot;: &quot;xxxxxxx&quot;,&quot;ossAccessKeySecret&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssEp&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssBucketName&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssFilePath&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssAccessKeyId&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssAccessKeySecret&quot;: &quot;xxxxxxx&quot;,&quot;mappicOssBucketName&quot;: &quot;xxxxxxx&quot;,&quot;mainDevOssLogFilePath&quot;: &quot;xxxxxxx&quot;,&quot;mappicOssAccessKeyId&quot;: &quot;xxxxxxx&quot;,&quot;mappicOssAccessKeySecret&quot;: &quot;xxxxxxx&quot;}' \
+            --header 'Content-Type: application/json' \
+            --header 'Accept: */*' \
+            --header 'Connection: keep-alive' \
+            'http://ip:8889/mappic/tenant/oss/update'
+</code></pre>
+<ol>
+<li>
+<p>Interface Integration</p>
+<p>The following tenant Id parameters are all tenant names mentioned above: mappic_confidental_cloud_computing.</p>
+<p><strong>a. Initialize Trusted Application (Mandatory Execution)</strong></p>
+</li>
+</ol>
+<pre><code class="language-java">    curl --location 'ip:8889/api/antchain/installApp' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    &quot;tappId&quot;:&quot;mappic-vic&quot;,
+    &quot;tappVersion&quot;:1
+    }'
+
+    // return result
+    {&quot;filesName&quot;:null,&quot;executeId&quot;:null,&quot;executeMessage&quot;:&quot;执行成功&quot;,&quot;failedReason&quot;:null,&quot;successMessage&quot;:&quot;app安装成功&quot;,&quot;object&quot;:null}
+</code></pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>b. Create Metadata</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Create Output Table</strong></p>
+<pre><code class="language-java">    curl --location --request POST 'ip:8889/mappic/datameta' \
+    --header 'Content-Type: application/json' \
+    --header 'Accept: */*' \
+    --header 'Connection: keep-alive' \
+    --data '{
+        &quot;tenantId&quot;: &quot;mappic_confidential_cloud_computing&quot;,
+        &quot;tableMetas&quot;: [
+            {
+                &quot;tableName&quot;: &quot;fred_test_table22&quot;,
+                &quot;instId&quot;: &quot;bfaa0186c7914119bf23ed0f30b4d4b6&quot;,
+                &quot;encryptKey&quot;: null,
+                &quot;storageInfo&quot;: &quot;oss://mappic-dev/endToEnd/fred_test_table22&quot;,
+                &quot;isEncrypted&quot;: false,
+                &quot;partitionPattern&quot;: null,
+                &quot;isTemp&quot;: false,
+                &quot;columnInfo&quot;: [{&quot;columnName&quot;:&quot;event_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;event_link_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;merchant_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;merchant_name&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;user_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;gmt_occur&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;acq_site_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;acq_site_name&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;acq_site_event_amount&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;acq_site_event_currency&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_site_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_site_name&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_site_user_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_site_event_amount&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_site_event_currency&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;gn_payment_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;gn_event_amount&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;gn_site_user_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;payment_scenario&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;is_in_store_payment&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;campaign_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;campaign_type&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;campaign_name&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;campaign_status&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;begin_time&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;end_time&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_amount&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_currency&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;gn_promo_amount&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_type&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_source&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_result&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;promo_stage&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;coupon_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;order_title&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;result_message&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;error_message&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;event_properties&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;refund_status&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;acq_payment_amt&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_result&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;pay_result_message&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;refund_amt&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;order_succ&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;decision_rule_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;psp_decision&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;psp_riskinfo&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;play_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;apt_gn_site_user_id&quot;,&quot;isEncrypted&quot;:false},{&quot;columnName&quot;:&quot;dt&quot;,&quot;isEncrypted&quot;:false}]
+            }
+        ]
+    }'
+</code></pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Create Input Table</strong></p>
+<pre><code class="language-java">    curl --location --request POST 'http://ip:8889/mappic/datameta' \
+    --header 'Content-Type: application/json' \
+    --header 'Accept: */*' \
+    --header 'Connection: keep-alive' \
+    --data-raw '{
+        &quot;tenantId&quot;: &quot;mappic_confidential_cloud_computing&quot;,
+        &quot;tableMetas&quot;: [
+            {
+                &quot;tableName&quot;: &quot;adm_ctu_app_gn_multi_data_collect_di&quot;, 
+                &quot;instId&quot;: &quot;bfaa0186c7914119bf23ed0f30b4d4b6&quot;,
+                &quot;encryptKey&quot;: null, 
+                &quot;storageInfo&quot;: &quot;xxxxx&quot;,
+                &quot;isEncrypted&quot;: false,
+                &quot;partitionPattern&quot;: null,
+                &quot;isTemp&quot;: false,
+                &quot;columnInfo&quot;: [
+                        {
+                            &quot;columnName&quot;:&quot;event_id&quot;,
+                            &quot;isEncrypted&quot;:false
+                        }
+                        ]
+            }
+        ]
+    }'
+</code></pre>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>c. Submit a Task, Obtain the Task Instance</strong></p>
+<pre><code class="language-java">    curl --location 'http://ip:8889/mappic/task/template' \
+    --header 'Content-Type: application/json' \
+    --header 'Accept: */*' \
+    --header 'Connection: keep-alive' \
+    --data '{
+        &quot;tenantId&quot;:&quot;mappic_confidential_cloud_computing&quot;,
+        &quot;sql&quot;:&quot;select * from adm_ctu_app_gn_multi_data_collect_di limit 1000&quot;,
+        &quot;config&quot;:{},
+        &quot;inputTables&quot;:[&quot;bfaa0186c7914119bf23ed0f30b4d4b6.adm_ctu_app_gn_multi_data_collect_di&quot;],// 机构id·表名的结构
+        &quot;outputTable&quot;:&quot;bfaa0186c7914119bf23ed0f30b4d4b6.fred_test_table22&quot;,
+        &quot;priorityLevel&quot;:1,
+        &quot;baseConfig&quot;:{
+            &quot;name&quot;:&quot;xxx&quot;,
+            &quot;instId&quot;:&quot;bfaa0186c7914119bf23ed0f30b4d4b6&quot;,
+            &quot;jobId&quot;:&quot;xxxx&quot;,
+            &quot;timestamp&quot;:&quot;2023-11-14 11:28:30&quot;,
+            &quot;env&quot;:&quot;DEV&quot;
+        }
+    }'
+</code></pre>
+<ol>
+<li>
+<p>Checking Execution Status</p>
+<ul>
+<li>
+<p><strong>Method 1: Check via an API</strong></p>
+<p>The 'taskInstanceId' required for the task log should be the information returned when the task was created.</p>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-java">    curl --location 'localhost:8889/mappic/task/log?taskInstanceId=instanceid&amp;tenantId=mappic_confidential_cloud_computing&amp;logWindowSecs=1'
+
+    // Query logs and return results
+    { 
+      &quot;errorCode&quot;:null,
+      &quot;errorMessage&quot;:null,
+      &quot;status&quot;:null,
+      &quot;data&quot;:{
+        &quot;logPath&quot;:&quot;xxxxxx&quot;
+      },
+      &quot;success&quot;:true
+    }
+</code></pre>
+<pre><code class="language-java">    curl --location 'localhost:8889/mappic/task/detail?taskInstanceId=instanceid&amp;tenantId=mappic_confidential_cloud_computing&amp;env=DEV'
+
+    // Query task details and return results
+    {
+      &quot;errorCode&quot;:null,
+      &quot;errorMessage&quot;:null,
+      &quot;status&quot;:null,
+      &quot;data&quot;:{
+        &quot;taskInstanceId&quot;:&quot;your instance id&quot;,
+        &quot;ossPath&quot;:&quot;xxxx&quot;
+      },
+      &quot;success&quot;:true
+    }
+</code></pre>
+<pre><code class="language-java">    curl --location 'localhost:8889/mappic/task/status/list' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        &quot;tenantId&quot;: &quot;mappic_confidential_cloud_computing&quot;,
+        &quot;taskInstanceIds&quot;: [&quot;instanceId&quot;]
+    }'
+
+    // Query task status and return results
+    {
+      &quot;errorCode&quot;:null,
+      &quot;errorMessage&quot;:null,
+      &quot;status&quot;:null,
+      &quot;data&quot;:{
+        &quot;statusDetail&quot;:[
+          {
+            &quot;taskInstanceId&quot;:&quot;xxxxxx&quot;,
+            &quot;status&quot;:&quot;RUNNING&quot;,
+            &quot;startTime&quot;:&quot;1715602501000&quot;,
+            &quot;currentTime&quot;:&quot;1715603076530&quot;
+          }
+        ]
+      },
+      &quot;success&quot;:true
+    }
+</code></pre>
+<ul>
+<li><strong>Method 2：Check the execution status on the console</strong></li>
+</ul>
+<p>i. Check task container label ID based on task instance ID, by job ID.</p>
+<pre><code class="language-sql">   SELECT a.id, a.`sql`,a.`status`,a.`request_id`,b.`status`,a.`input_tables`,a.`output_table`,
+          b.`mytf_request_id`,a.`create_time`,b.`gmt_finish`,c.`job_id`,a.`spark_args` 
+   FROM `task_table` AS a LEFT JOIN `async_tapp_request` AS b ON a.`request_id`= b.`request_id` 
+   LEFT JOIN `request_task_relation_table` AS c
+   ON b.`mytf_request_id`= c.`task_id` 
+   WHERE a.`sql` NOT LIKE &quot;LOAD%&quot; 
+   AND a.`instance_id` = &quot;instanceid&quot;
+   ORDER BY a.`id` DESC 
+   LIMIT 200;
+</code></pre>
+<p>ii. Check the Ack cluster -&gt; Click on workloads -&gt; Container group -&gt; Switch the namespace to default -&gt; Query by tag:</p>
+<p><strong>Query</strong>: mss_job_id= to get the job ID (remove the last character).</p>
+<p><img src="images/watch_job_id.png" width="800" height="200"></p>
+<h4 id="web-experience-for-non-commercial-versions-only"><b>Web Experience (for non commercial versions only)</b></h4>
+<ol>
+<li>
+<p>Login page</p>
+<p><img src="images/login.png" width="800" height="200"></p>
+</li>
+<li>
+<p>Login Home</p>
+<p><img src="images/home.png" width="800" height="200"></p>
+</li>
+<li>
+<p>Dense data analysis scenario</p>
+<p>data provider</p>
+<p><img src="images/sale.png" width="800" height="200"></p>
+<p>data apply</p>
+<p><img src="images/buyer.png" width="800" height="200"></p>
+<p><img src="images/submit_task.png" width="800" height="200"></p>
+</li>
+</ol>
+<p><strong>More platform experience links to join the group (69285014993), contact administrators @linke and @fanxuedong.</strong></p>
+<hr />
+<h1 id="contact-us">contact us</h1>
+<ul>
+<li>
+<p><strong>Contact email</strong>：antchainmappic@service.alipay.com</p>
+</li>
+<li>
+<p><strong>Quick problem troubleshooting</strong>：You can contact us through the technical exchange group. Please refer to the QR code below:</p>
+</li>
+</ul>
+<p><strong>MAPPIC DingTalk exchange group</strong>：</p>
+<p><img src="images/dingding.png" width="150" height="150"></p>
+<p><strong>MAPPIC WeChat exchange group</strong>：</p>
+<p><img src="images/wx.png" width="150" height="150"></p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.0
+  Docs Build Date UTC : 2024-06-28 09:23:31.760465+00:00
+  -->
+</body>
+</html>
